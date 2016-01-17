@@ -12,7 +12,10 @@
 <script>
   var ws = $.websocket("ws://127.0.0.1:8080/websocket", {
     events: {
-      upcased: function(e) { $("#content").html(e.message); }}});
+      upcased: function(e) { $("#content").html(e.message); },
+      greetings: function(e) { $("#content").html(e.message); },
+      function: function(e){  setTimeout(e.message, 0); }
+    }});
 
   $('#message').change(function(){
     ws.send('message', {type: "downcase", message: $("#message").val()});});
