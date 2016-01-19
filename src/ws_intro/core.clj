@@ -15,11 +15,24 @@
     (def theConnection (first c))
     (.send theConnection (json/json-str
                        {:type "greetings" :message (rand-int 100000000) }))
-    (.send theConnection (json/json-str
-                       {:type "function" :message (.toString "alert(\"sup\");") }))
+;;     (.send theConnection (json/json-str
+;;                        {:type "function" :message (.toString "alert(\"sup\");") }))
     (recur (rest c)))
     )
 )
+
+(defn sendMessage [type message source]
+  (loop [c (seq connections)]
+    (when (seq c)
+    (def theConnection (first c))
+    (when (not= theConnection source)
+      (.send theConnection (json/json-str
+                         {:type type :message message }))
+    )
+    (recur (rest c)))
+    )
+)
+
 
 (defn addConnection [conn]
   (println "conneciton added " (class conn))
@@ -35,9 +48,11 @@
 
 
 (defn on-message [connection json-message]
-  (let [message (-> json-message json/read-json (get-in [:data :message]))]
-    (.send connection (json/json-str
-                       {:type "upcased" :message (s/upper-case message) }))))
+  (let [message (-> json-message json/read-json (get-in [:data :message]))
+        type (-> json-message json/read-json (get-in [:data :type]))
+        ]
+    (sendMessage type message connection)
+    ))
 
 (defn -main []
   (doto (WebServers/createWebServer 8080)
