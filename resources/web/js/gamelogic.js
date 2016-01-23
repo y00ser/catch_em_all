@@ -5,12 +5,17 @@ vX = 4; 	// X velocity
 
 function moveObj(name, Xpix, Ypix)
 {
-  obj = document.getElementById(name);
+	obj = document.getElementById(name);
 
 	var px = parseInt(obj.style.left) + Xpix;
 	var py = parseInt(obj.style.top) + Ypix;
-	obj.style.left = px;
-	obj.style.top = py;
+	
+	if(px > playGroundRect.leftTopX && py > playGroundRect.leftTopY &&
+			(px + obj.width) < playGroundRect.rightBottomX && (py + obj.height) < playGroundRect.rightBottomY)
+		{
+			obj.style.left = px;
+			obj.style.top = py;
+		}
 }
 
 function fireTorpedo(name)

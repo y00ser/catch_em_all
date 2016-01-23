@@ -26,17 +26,25 @@
 function sendCommand(command){
    ws.send('message', {type: "function", message: command });
 }
-
+var playGroundRect;
+function init(){
+	var playGround = document.getElementById("playground");
+	playGroundRect = {leftTopX: playground.offsetLeft, leftTopY:playground.offsetTop,
+			rightBottomX:playground.offsetLeft + playground.clientWidth,
+			rightBottomY:playground.offsetTop + playground.clientHeight};
+	playGroundRect.toString = function(){return playGroundRect.leftTopX +
+		":"+playGroundRect.leftTopY+"/"+playGroundRect.rightBottomX+":"+playGroundRect.rightBottomY}
+}
 </script>
 
 <script src="js/gamelogic.js"></script>
 </head>
 
-<body onKeyPress="ProcessKeypress(event);">
+<body onKeyPress="ProcessKeypress(event);" onLoad="init();">
 
 	<h4>Catch'em all</h4>
 	<input id="message" type="text" />
-	
+
 	<section id="content"></section>
 	<p>
 		<img id="saucer"
@@ -56,12 +64,11 @@ function sendCommand(command){
 	<img id="torpedo"
 		style="z-index: 0; left: -100px; position: absolute; top: -100px"
 		src="pic/torpedo.gif" width="12" height="12">
-		
-<!-- 		Playground -->
 
-<div id="playground" style="width:1300px; height:500px; border:1px solid" >
+	<!-- 		Playground -->
 
-</div>
+	<div id="playground"
+		style="width: 1300px; height: 500px; border: 1px solid"></div>
 
 </body>
 </html>
