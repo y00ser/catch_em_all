@@ -33,8 +33,11 @@ function init(){
 			rightBottomX:playground.offsetLeft + playground.clientWidth,
 			rightBottomY:playground.offsetTop + playground.clientHeight};
 	playGroundRect.toString = function(){return playGroundRect.leftTopX +
-		":"+playGroundRect.leftTopY+"/"+playGroundRect.rightBottomX+":"+playGroundRect.rightBottomY}
+		":"+playGroundRect.leftTopY+"/"+playGroundRect.rightBottomX+":"+playGroundRect.rightBottomY};
+		
+		initGameLogic();
 }
+
 </script>
 
 <script src="js/gamelogic.js"></script>
@@ -48,7 +51,7 @@ function init(){
 	<section id="content"></section>
 	<p>
 		<img id="saucer"
-			style="z-index: 0; left: 300px; position: absolute; top: 250px"
+			style="z-index: 0; left: 300px; position: absolute; top: 90px"
 			height=72 width=100 align=baseline border=0 hspace=0
 			src="pic/saucer.gif">
 	</p>
@@ -56,7 +59,7 @@ function init(){
 
 	<p>
 		<img id="rwithgun"
-			style="z-index: 0; left: 500px; position: absolute; top: 250px"
+			style="z-index: 0; left: 300px; position: absolute; top: 510px"
 			height=72 width=100 align=baseline border=0 hspace=0
 			src="pic/rwithgun.jpg">
 	</p>
