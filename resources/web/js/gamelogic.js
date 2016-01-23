@@ -3,9 +3,11 @@ steps = 500; // Total number of steps to perform the effect
 accel = 0.05; // Acceleration
 vX = 4; // X velocity
 
-const topPlayer = {name:"saucer" , torpedoDirection:1};
-const bottomPlayer = {name: "rwithgun", torpedoDirection:-1};
-var myObj = topPlayer;
+const topPlayer = {name:"saucer" , torpedoDirection:1, torpedoIndex: 0, torpedoPrefix: "top"};
+const bottomPlayer = {name: "rwithgun", torpedoDirection:-1, torpedoIndex:0, torpedoPrefix: "bottom"};
+var myObj = bottomPlayer;
+var torpedoPrefix = "torpedo"
+var torpedoSteps = {};
 
 function moveObj(name, Xpix, Ypix, makeContinous = true) {
 	obj = document.getElementById(name);
@@ -51,14 +53,14 @@ function makeMovementContinous(name, Xpix, Ypix){
 	}
 }
 
-function fireTorpedo(name) {
+function fireTorpedo(name, torpedoId) {
 	// Get the position of the saucer
 	var obj = document.getElementById(name);
 	var px = parseInt(obj.style.left);
 	var py = parseInt(obj.style.top);
 
 	// Fire topredo to the right of the saucer
-	var t = document.getElementById("torpedo");
+	var t = document.getElementById(torpedoId);
 	t.style.left = px + document.getElementById(myObj.name).width/2;
 	t.style.top = py + 20 * myObj.torpedoDirection;
 
@@ -66,22 +68,29 @@ function fireTorpedo(name) {
 	accel = 0.05;
 	vX = 1;
 
-	window.setTimeout('moveTorpedo();', 0);
+	window.setTimeout('moveTorpedo("'+ torpedoId +'");', 0);
 }
 
-function moveTorpedo() {
-	step++;
-	if (step >= steps)
-		return; // The effect has finished
+function moveTorpedo(torpedoId) {
+	var actualStep = torpedoSteps[torpedoId];
+	if(actualStep == undefined)
+	{
+		actualStep = 1;
+	}
+	torpedoSteps[torpedoId] = ++actualStep;
+	if (actualStep >= steps){
+		torpedoSteps[torpedoId] = 0;
+		return; // no more torpedo movement
+	}
 
 	// Move torpedo to the right by the given velocity and acceleration
-	var t = document.getElementById("torpedo");
+	var t = document.getElementById(torpedoId);
 	var py = parseInt(t.style.top);
 	vX += parseInt(accel); // Increase velocity by the amount of acceleration
 	t.style.top = py + vX * myObj.torpedoDirection;
 //	var torpedoLeft = parseInt(t.style.left);
 //	var rwithgunLeft = parseInt(document.getElementById("rwithgun").style.left);
-	window.setTimeout("moveTorpedo();", 0);
+	window.setTimeout('moveTorpedo("'+torpedoId+'");', 0);
 	if (torpedoLeft > rwithgunLeft) {
 		// alert("collison");
 	} else {
@@ -108,16 +117,16 @@ function ProcessKeypress(e) {
 	} else if (ch == 'd') {
 		moveObjectEachSide(objectToMove, moveBy, 0);
 	}
-	else if (ch == ' ') {
-		sendCommand('fireTorpedo("' + objectToMove + '")');
-		fireTorpedo(objectToMove);
+	else if (ch == 's') {
+		sendFireTorpedo();
 	}
 }
 function moveObjectEachSide(obj, x, y) {
 	sendCommand('moveObj("' + obj + '", ' + x + ', ' + y + ')');
 	moveObj(obj, x, y);
 }
-function sendFireTorpedo(obj) {
-	sendCommand('fireTorpedo("' + obj + '")');
-	fireTorpedo(myObj.name);
+function sendFireTorpedo() {
+	myObj.torpedoIndex = (myObj.torpedoIndex + 1) % 10;
+	sendCommand('fireTorpedo("' + myObj.name + '","'+ myObj.torpedoPrefix + myObj.torpedoIndex +'")');	
+	fireTorpedo(myObj.name, myObj.torpedoPrefix + myObj.torpedoIndex);
 }
