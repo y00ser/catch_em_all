@@ -3,6 +3,10 @@ steps = 500; // Total number of steps to perform the effect
 accel = 0.05; // Acceleration
 vX = 4; // X velocity
 
+const topPlayer = {name:"saucer" , torpedoDirection:1};
+const bottomPlayer = {name: "rwithgun", torpedoDirection:-1};
+var myObj = topPlayer;
+
 function moveObj(name, Xpix, Ypix, makeContinous = true) {
 	obj = document.getElementById(name);
 
@@ -55,8 +59,8 @@ function fireTorpedo(name) {
 
 	// Fire topredo to the right of the saucer
 	var t = document.getElementById("torpedo");
-	t.style.left = px + 95;
-	t.style.top = py + 38;
+	t.style.left = px + document.getElementById(myObj.name).width/2;
+	t.style.top = py + 20 * myObj.torpedoDirection;
 
 	step = 0;
 	accel = 0.05;
@@ -72,21 +76,21 @@ function moveTorpedo() {
 
 	// Move torpedo to the right by the given velocity and acceleration
 	var t = document.getElementById("torpedo");
-	var px = parseInt(t.style.left);
+	var py = parseInt(t.style.top);
 	vX += parseInt(accel); // Increase velocity by the amount of acceleration
-	t.style.left = px + vX;
-	var torpedoLeft = parseInt(t.style.left);
-	var rwithgunLeft = parseInt(document.getElementById("rwithgun").style.left);
+	t.style.top = py + vX * myObj.torpedoDirection;
+//	var torpedoLeft = parseInt(t.style.left);
+//	var rwithgunLeft = parseInt(document.getElementById("rwithgun").style.left);
+	window.setTimeout("moveTorpedo();", 0);
 	if (torpedoLeft > rwithgunLeft) {
 		// alert("collison");
 	} else {
 		// accel+=0.05;
-		window.setTimeout("moveTorpedo();", 0);
+		
 	}
 }
 
 function ProcessKeypress(e) {
-	var myObj = "rwithgun";
 	var moveBy = 5;
 
 	if (e.keyCode)
@@ -95,18 +99,18 @@ function ProcessKeypress(e) {
 		keycode = e.which;
 	ch = String.fromCharCode(keycode);
 
-	var objectToMove = myObj;
+	var objectToMove = myObj.name;
 	var moveObjectByX = 0;
 	var moveObjectByY = 0;
 
 	if (ch == 'a') {
-		moveObjectEachSide(myObj, -moveBy, 0);
+		moveObjectEachSide(objectToMove, -moveBy, 0);
 	} else if (ch == 'd') {
-		moveObjectEachSide(myObj, moveBy, 0);
+		moveObjectEachSide(objectToMove, moveBy, 0);
 	}
 	else if (ch == ' ') {
-		sendCommand('fireTorpedo("' + myObj + '")');
-		fireTorpedo(myObj);
+		sendCommand('fireTorpedo("' + objectToMove + '")');
+		fireTorpedo(objectToMove);
 	}
 }
 function moveObjectEachSide(obj, x, y) {
@@ -115,5 +119,5 @@ function moveObjectEachSide(obj, x, y) {
 }
 function sendFireTorpedo(obj) {
 	sendCommand('fireTorpedo("' + obj + '")');
-	fireTorpedo(myObj);
+	fireTorpedo(myObj.name);
 }
