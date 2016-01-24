@@ -5,9 +5,12 @@ vX = 4; // X velocity
 
 const topPlayer = {name:"saucer" , torpedoDirection:1, torpedoIndex: 0, torpedoPrefix: "top"};
 const bottomPlayer = {name: "rwithgun", torpedoDirection:-1, torpedoIndex:0, torpedoPrefix: "bottom"};
-var myObj = bottomPlayer;
+var myObj = topPlayer;
 var torpedoPrefix = "torpedo"
 var torpedoSteps = {};
+
+var frogPefix="frog";
+var frogIndexes = [0, 1, 2, 3, 4, 5 ,6 ,7, 8, 9];
 
 function moveObj(name, Xpix, Ypix, makeContinous = true) {
 	obj = document.getElementById(name);
@@ -84,19 +87,37 @@ function moveTorpedo(torpedoId) {
 	}
 
 	// Move torpedo to the right by the given velocity and acceleration
-	var t = document.getElementById(torpedoId);
-	var py = parseInt(t.style.top);
+	var torpedo = document.getElementById(torpedoId);
+	var py = parseInt(torpedo.style.top);
 	vX += parseInt(accel); // Increase velocity by the amount of acceleration
-	t.style.top = py + vX * myObj.torpedoDirection;
-//	var torpedoLeft = parseInt(t.style.left);
-//	var rwithgunLeft = parseInt(document.getElementById("rwithgun").style.left);
-	window.setTimeout('moveTorpedo("'+torpedoId+'");', 0);
-	if (torpedoLeft > rwithgunLeft) {
-		// alert("collison");
-	} else {
-		// accel+=0.05;
-		
+	torpedo.style.top = py + vX * myObj.torpedoDirection;
+	var torpedoLeft = parseInt(torpedo.style.left);
+	var torpedoTop = parseInt(torpedo.style.top);
+
+	
+	for(i = 0 ; i < frogIndexes.length; i++)
+	{
+		var frog = document.getElementById(frogPefix + frogIndexes[i] );
+		if(frog != undefined){
+			var frogLeft = parseInt(frog.style.left);
+			var frogTop = parseInt(frog.style.top);
+			var frogRight = frogLeft + frog.width;
+			var frogBottom = frogTop + frog.height;
+			
+			if(torpedoLeft > frogLeft && torpedoLeft < frogRight &&
+			   torpedoTop < frogBottom && torpedoTop > 	frogTop)
+			{
+				// only detect host player hits
+				if(torpedoId.startsWith(myObj.torpedoPrefix)){
+					torpedoSteps[torpedoId] = 0
+					torpedo.style.left = "-100px";
+					return;
+				}
+				
+			}
+		}
 	}
+	window.setTimeout('moveTorpedo("'+torpedoId+'");', 0);
 }
 
 function ProcessKeypress(e) {
