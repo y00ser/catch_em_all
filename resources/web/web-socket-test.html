@@ -14,9 +14,9 @@
 var ws;
 
 
-  $('#message').change(function(){
+//   $('#message').change(function(){
 
-   ws.send('message', {type: "downcase", message: $("#message").val()});});
+//    ws.send('message', {type: "downcase", message: $("#message").val()});});
 
 function sendCommand(command){
    ws.send('message', {type: "function", message: command });

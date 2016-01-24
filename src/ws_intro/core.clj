@@ -44,8 +44,12 @@
 	  (def coordinator (first connections))
 	  (def client (first (rest connections)))
 	  (println "sending start command ")
-	    (.send coordinator (json/json-str
-	                         {:type "function" :message "playGame=true;startGame();" }))
+	   (.send coordinator (json/json-str
+	                        {:type "function" :message "setPlayerIndex(0);playGame=true;startGame();" }))
+     (.send client (json/json-str
+	                         {:type "function" :message "setPlayerIndex(1);" }))
+     
+     
      (def isGameStarted true)
 	  ))
   (def isGameStarted false)
@@ -58,7 +62,7 @@
     (designatePlayers)
    )
     
-  (sendGreetings)
+;  (sendGreetings)
     )
 
 

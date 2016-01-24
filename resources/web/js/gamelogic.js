@@ -11,18 +11,23 @@ var playGroundHeight;
 var playGroundTop;
 var playGroundLeft;
 
-const topPlayer = {name:"saucer" , torpedoDirection:1, torpedoIndex: 0, torpedoPrefix: "top"};
-const bottomPlayer = {name: "rwithgun", torpedoDirection:-1, torpedoIndex:0, torpedoPrefix: "bottom"};
-
+const topPlayer = {name:"saucer", displayName: "Space Boy" , torpedoDirection:1, torpedoIndex: 0, torpedoPrefix: "top"};
+const bottomPlayer = {name: "rwithgun", displayName: "Bandit", torpedoDirection:-1, torpedoIndex:0, torpedoPrefix: "bottom"};
+const players = [topPlayer, bottomPlayer];
 const frog0 = {name:"frog0" , startTop:100, jumpSpeed: 100, jumpFreq: 1000};
 const frog1 = {name:"frog1" , startTop:200, jumpSpeed: 50, jumpFreq: 1000};
 const frogs = [frog0];
 
 
-var myObj = topPlayer;
+var player;
 var torpedoPrefix = "torpedo"
 var torpedoSteps = {};
 var playGame = false;
+
+function setPlayerIndex(index){
+	player = players[index];
+	$("#content").html(player.displayName);
+}
 
 function moveObj(name, Xpix, Ypix, makeContinous = true) {
 	obj = document.getElementById(name);
@@ -113,8 +118,8 @@ function fireTorpedo(name, torpedoId) {
 
 	// Fire topredo to the right of the saucer
 	var t = document.getElementById(torpedoId);
-	t.style.left = px + document.getElementById(myObj.name).width/2;
-	t.style.top = py + 20 * myObj.torpedoDirection;
+	t.style.left = px + document.getElementById(player.name).width/2;
+	t.style.top = py + 20 * player.torpedoDirection;
 
 	step = 0;
 	accel = 0.05;
@@ -139,7 +144,7 @@ function moveTorpedo(torpedoId) {
 	var torpedo = document.getElementById(torpedoId);
 	var py = parseInt(torpedo.style.top);
 	vX += parseInt(accel); // Increase velocity by the amount of acceleration
-	torpedo.style.top = py + vX * myObj.torpedoDirection;
+	torpedo.style.top = py + vX * player.torpedoDirection;
 	var torpedoLeft = parseInt(torpedo.style.left);
 	var torpedoTop = parseInt(torpedo.style.top);
 
@@ -157,7 +162,7 @@ function moveTorpedo(torpedoId) {
 			   torpedoTop < frogBottom && torpedoTop > 	frogTop)
 			{
 				// only detect host player hits
-				if(torpedoId.startsWith(myObj.torpedoPrefix)){
+				if(torpedoId.startsWith(player.torpedoPrefix)){
 					torpedoSteps[torpedoId] = 0
 					torpedo.style.left = "-100px";
 					return;
@@ -176,7 +181,7 @@ function ProcessKeypress(e) {
 		keycode = e.which;
 	ch = String.fromCharCode(keycode);
 
-	var objectToMove = myObj.name;
+	var objectToMove = player.name;
 	var moveObjectByX = 0;
 	var moveObjectByY = 0;
 
@@ -194,7 +199,7 @@ function moveObjectEachSide(obj, x, y, makeContinous = true) {
 //	moveObj(obj, x, y);
 }
 function sendFireTorpedo() {
-	myObj.torpedoIndex = (myObj.torpedoIndex + 1) % 10;
-	sendCommand('fireTorpedo("' + myObj.name + '","'+ myObj.torpedoPrefix + myObj.torpedoIndex +'")');	
-	fireTorpedo(myObj.name, myObj.torpedoPrefix + myObj.torpedoIndex);
+	player.torpedoIndex = (player.torpedoIndex + 1) % 10;
+	sendCommand('fireTorpedo("' + player.name + '","'+ player.torpedoPrefix + player.torpedoIndex +'")');	
+	fireTorpedo(player.name, player.torpedoPrefix + player.torpedoIndex);
 }
