@@ -25,27 +25,53 @@
   (loop [c (seq connections)]
     (when (seq c)
     (def theConnection (first c))
-    (when (not= theConnection source)
+;    (when (not= theConnection source)
       (.send theConnection (json/json-str
                          {:type type :message message }))
-    )
+      (println "message is sent: " message)
+;    )
     (recur (rest c)))
     )
 )
 
+(def isGameStarted false)
+(def gameCoordinator nil)
+(def client nil)
+
+(defn designatePlayers []
+  (if (> (count connections) 1)
+    (do
+	  (def coordinator (first connections))
+	  (def client (first (rest connections)))
+	  (println "sending start command ")
+	    (.send coordinator (json/json-str
+	                         {:type "function" :message "playGame=true;startGame();" }))
+     (def isGameStarted true)
+	  ))
+  (def isGameStarted false)
+  )
 
 (defn addConnection [conn]
   (println "conneciton added " (class conn))
   (def connections (conj connections conn))
+  (when (= false isGameStarted)
+    (designatePlayers)
+   )
+    
   (sendGreetings)
     )
 
+
 (defn removeConnection [conn]
   (println "removing connecion" conn)
+  (when (= conn client)
+    (.send coordinator (json/json-str
+	                         {:type "function" :message "playGame=false;" }))
+   )
   (def connections (disj connections conn))
-  )
-
-
+  (designatePlayers)
+)
+    
 
 (defn on-message [connection json-message]
   (let [message (-> json-message json/read-json (get-in [:data :message]))

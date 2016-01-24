@@ -3,22 +3,34 @@ steps = 500; // Total number of steps to perform the effect
 accel = 0.05; // Acceleration
 vX = 4; // X velocity
 
+var moveBy = 5; //players velocity
+
+var playGround;
+var playGroundWidth;
+var playGroundHeight;
+var playGroundTop;
+var playGroundLeft;
+
 const topPlayer = {name:"saucer" , torpedoDirection:1, torpedoIndex: 0, torpedoPrefix: "top"};
 const bottomPlayer = {name: "rwithgun", torpedoDirection:-1, torpedoIndex:0, torpedoPrefix: "bottom"};
+
+const frog0 = {name:"frog0" , startTop:100, jumpSpeed: 100, jumpFreq: 1000};
+const frog1 = {name:"frog1" , startTop:200, jumpSpeed: 50, jumpFreq: 1000};
+const frogs = [frog0];
+
+
 var myObj = topPlayer;
 var torpedoPrefix = "torpedo"
 var torpedoSteps = {};
-
-var frogPefix="frog";
-var frogIndexes = [0, 1, 2, 3, 4, 5 ,6 ,7, 8, 9];
+var playGame = false;
 
 function moveObj(name, Xpix, Ypix, makeContinous = true) {
 	obj = document.getElementById(name);
 
 	var px = parseInt(obj.style.left) + Xpix;
 	var py = parseInt(obj.style.top) + Ypix;
-
-	if (px > playGroundRect.leftTopX && py > playGroundRect.leftTopY
+	
+	if (name.startsWith("frog") || px > playGroundRect.leftTopX && py > playGroundRect.leftTopY
 			&& (px + obj.width) < playGroundRect.rightBottomX
 			&& (py + obj.height) < playGroundRect.rightBottomY) {
 		obj.style.left = px;
@@ -27,14 +39,50 @@ function moveObj(name, Xpix, Ypix, makeContinous = true) {
 	if(makeContinous){
 		setTimeout('makeMovementContinous("'+name+'", '+Xpix+','+Ypix+')', 0);	
 	}
-	
-	
+}
+function resetFrog(name, Xpix) {
+	obj = document.getElementById(name);
+	obj.style.left = Xpix;
+	//TODO visibility true
 }
 var movementArray = new Array();
 var movementArrayMaxLength = 20;
 
 function initGameLogic(){
-	setTimeout("autoMove()", 0);
+	playGround = document.getElementById("playground");
+	playGroundWidth = playGround.clientWidth;
+	playGroundHeight = playGround.clientHeight;
+	playGroundTop = playGround.offsetTop;
+	playGroundLeft = playGround.offsetLeft;
+	setTimeout("autoMove()", 0);	
+}
+function startGame(){
+		setTimeout("initFrogs()",100)
+
+}
+function initFrogs(){
+	for(i = 0 ; i < frogs.length; i++)
+	{
+		sendCommand('resetFrog('+frogs[i].name+', 1010 )');
+	}
+	for(i = 0 ; i < frogs.length; i++)
+	{
+		var frog = document.getElementById(frogs[i].name);		
+		moveFrog(frogs[i].name,(-frogs[i].jumpSpeed), frogs[i].jumpFreq );
+	}
+}
+function moveFrog(frogId, speed, freq){
+	if(playGame){
+		var frog = document.getElementById(frogId);	
+		if(parseInt(frog.style.left) < playGroundLeft){
+			moveObjectEachSide(frogId, playGroundLeft + playGroundWidth, 0, false);
+		}
+		else{
+			moveObjectEachSide(frogId,speed,0,false);
+		}
+		setTimeout('moveFrog("'+frogId+'",'+speed+','+ freq+')', freq);	
+	}
+
 }
 function autoMove(){
 	if(movementArray.length != 0){
@@ -52,7 +100,6 @@ function makeMovementContinous(name, Xpix, Ypix){
 		{
 			movementArray.push({command: 'moveObj("'+name+'", '+Xpix+','+Ypix+', false)', waitTime: waitTime});
 		}
-		
 	}
 }
 
@@ -95,9 +142,9 @@ function moveTorpedo(torpedoId) {
 	var torpedoTop = parseInt(torpedo.style.top);
 
 	
-	for(i = 0 ; i < frogIndexes.length; i++)
+	for(i = 0 ; i < frogs.length; i++)
 	{
-		var frog = document.getElementById(frogPefix + frogIndexes[i] );
+		var frog = document.getElementById(frogs[i].name );
 		if(frog != undefined){
 			var frogLeft = parseInt(frog.style.left);
 			var frogTop = parseInt(frog.style.top);
@@ -121,8 +168,6 @@ function moveTorpedo(torpedoId) {
 }
 
 function ProcessKeypress(e) {
-	var moveBy = 5;
-
 	if (e.keyCode)
 		keycode = e.keyCode;
 	else
@@ -142,9 +187,9 @@ function ProcessKeypress(e) {
 		sendFireTorpedo();
 	}
 }
-function moveObjectEachSide(obj, x, y) {
-	sendCommand('moveObj("' + obj + '", ' + x + ', ' + y + ')');
-	moveObj(obj, x, y);
+function moveObjectEachSide(obj, x, y, makeContinous = true) {
+	sendCommand('moveObj("' + obj + '", ' + x + ', ' + y + ','+makeContinous+')');
+//	moveObj(obj, x, y);
 }
 function sendFireTorpedo() {
 	myObj.torpedoIndex = (myObj.torpedoIndex + 1) % 10;
