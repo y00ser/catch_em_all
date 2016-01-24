@@ -40,7 +40,7 @@ function moveObj(name, Xpix, Ypix, makeContinous = true) {
 		setTimeout('makeMovementContinous("'+name+'", '+Xpix+','+Ypix+')', 0);	
 	}
 }
-function resetFrog(name, Xpix) {
+function resetObject(name, Xpix) {
 	obj = document.getElementById(name);
 	obj.style.left = Xpix;
 	//TODO visibility true
@@ -57,13 +57,15 @@ function initGameLogic(){
 	setTimeout("autoMove()", 0);	
 }
 function startGame(){
-		setTimeout("initFrogs()",100)
+	sendCommand('resetObject("'+topPlayer.name+'", '+(playGroundLeft + 10)+')');
+	sendCommand('resetObject("'+bottomPlayer.name+'", '+(playGroundLeft + 10)+')');
+	setTimeout("initFrogs()",100)
 
 }
 function initFrogs(){
 	for(i = 0 ; i < frogs.length; i++)
 	{
-		sendCommand('resetFrog('+frogs[i].name+', 1010 )');
+		sendCommand('resetObject('+frogs[i].name+', 1010 )');
 	}
 	for(i = 0 ; i < frogs.length; i++)
 	{
@@ -75,10 +77,10 @@ function moveFrog(frogId, speed, freq){
 	if(playGame){
 		var frog = document.getElementById(frogId);	
 		if(parseInt(frog.style.left) < playGroundLeft){
-			moveObjectEachSide(frogId, playGroundLeft + playGroundWidth, 0, false);
+			sendCommand('resetObject("'+frogId+'", '+(playGroundLeft + playGroundWidth)+')');
 		}
 		else{
-			moveObjectEachSide(frogId,speed,0,false);
+			sendCommand('resetObject("'+frogId+'", '+(parseInt(frog.style.left) + speed)+')');
 		}
 		setTimeout('moveFrog("'+frogId+'",'+speed+','+ freq+')', freq);	
 	}

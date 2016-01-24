@@ -11,17 +11,12 @@
 	src="http://jquery-websocket.googlecode.com/files/jquery.websocket-0.0.1.js">
 </script>
 <script>
+var ws;
 
-  var ws = $.websocket("ws://127.0.0.1:8080/websocket", {
-    events: {
-      upcased: function(e) { $("#content").html(e.message); },
-      greetings: function(e) { $("#content").html(e.message); },
-      function: function(e){  setTimeout(e.message, 0); }
-    }});
 
   $('#message').change(function(){
 
-    ws.send('message', {type: "downcase", message: $("#message").val()});});
+   ws.send('message', {type: "downcase", message: $("#message").val()});});
 
 function sendCommand(command){
    ws.send('message', {type: "function", message: command });
@@ -36,6 +31,13 @@ function init(){
 		":"+playGroundRect.leftTopY+"/"+playGroundRect.rightBottomX+":"+playGroundRect.rightBottomY};
 		
 		initGameLogic();
+		
+     ws = $.websocket("ws://127.0.0.1:8080/websocket", {
+			    events: {
+			      upcased: function(e) { $("#content").html(e.message); },
+			      greetings: function(e) { $("#content").html(e.message); },
+			      function: function(e){  setTimeout(e.message, 0); }
+			    }});
 }
 
 </script>
