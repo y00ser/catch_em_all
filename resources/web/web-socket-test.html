@@ -12,8 +12,6 @@
 </script>
 <script>
 var ws;
-
-
 //   $('#message').change(function(){
 
 //    ws.send('message', {type: "downcase", message: $("#message").val()});});
@@ -48,9 +46,9 @@ function init(){
 <body onKeyPress="ProcessKeypress(event);" onLoad="init();">
 
 	<h4>Catch'em all</h4>
-	<input id="message" type="text" />
+<!-- 	<input id="message" type="text" /> -->
 
-	<section id="content"></section>
+	<div align="middle"><section id="content"></section><br/><section id="score">Score: </section></div>
 	<p>
 		<img id="saucer"
 			style="z-index: 0; left: 300px; position: absolute; top: 110px"

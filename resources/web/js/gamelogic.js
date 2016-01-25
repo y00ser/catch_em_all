@@ -3,7 +3,7 @@ steps = 500; // Total number of steps to perform the effect
 accel = 0.05; // Acceleration
 vX = 4; // X velocity
 
-var moveBy = 5; //players velocity
+var moveBy = 5; // players velocity
 
 var playGround;
 var playGroundWidth;
@@ -11,8 +11,8 @@ var playGroundHeight;
 var playGroundTop;
 var playGroundLeft;
 
-const topPlayer = {name:"saucer", displayName: "Space Boy" , torpedoDirection:1, torpedoIndex: 0, torpedoPrefix: "top"};
-const bottomPlayer = {name: "rwithgun", displayName: "Bandit", torpedoDirection:-1, torpedoIndex:0, torpedoPrefix: "bottom"};
+const topPlayer = {name:"saucer", displayName: "Space Boy" , torpedoDirection:1, torpedoIndex: 0, torpedoPrefix: "top", score: 0};
+const bottomPlayer = {name: "rwithgun", displayName: "Bandit", torpedoDirection:-1, torpedoIndex:0, torpedoPrefix: "bottom", score: 0};
 const players = [topPlayer, bottomPlayer];
 const frog0 = {name:"frog0" , startTop:100, jumpSpeed: 100, jumpFreq: 1000};
 const frog1 = {name:"frog1" , startTop:200, jumpSpeed: 50, jumpFreq: 1000};
@@ -26,7 +26,14 @@ var playGame = false;
 
 function setPlayerIndex(index){
 	player = players[index];
-	$("#content").html(player.displayName);
+	player.score=0;
+	$("#content").html("You are: " + player.displayName);
+}
+function udpatePlayerScore(index, score){
+	var actualPlayer = players[index];
+	if(actualPlayer == player){
+		$("#score").html("Your score: " + score);
+	}
 }
 
 function moveObj(name, Xpix, Ypix, makeContinous = true) {
@@ -39,7 +46,6 @@ function moveObj(name, Xpix, Ypix, makeContinous = true) {
 			&& (px + obj.width) < playGroundRect.rightBottomX
 			&& (py + obj.height) < playGroundRect.rightBottomY) {
 		obj.style.left = px;
-		obj.style.top = py;
 	}
 	if(makeContinous){
 		setTimeout('makeMovementContinous("'+name+'", '+Xpix+','+Ypix+')', 0);	
@@ -48,7 +54,7 @@ function moveObj(name, Xpix, Ypix, makeContinous = true) {
 function resetObject(name, Xpix) {
 	obj = document.getElementById(name);
 	obj.style.left = Xpix;
-	//TODO visibility true
+	// TODO visibility true
 }
 var movementArray = new Array();
 var movementArrayMaxLength = 20;
@@ -78,11 +84,15 @@ function initFrogs(){
 		moveFrog(frogs[i].name,(-frogs[i].jumpSpeed), frogs[i].jumpFreq );
 	}
 }
+function showHideObject(id, display = "block"){
+	document.getElementById(id).style.display=display;
+}
 function moveFrog(frogId, speed, freq){
 	if(playGame){
 		var frog = document.getElementById(frogId);	
 		if(parseInt(frog.style.left) < playGroundLeft){
 			sendCommand('resetObject("'+frogId+'", '+(playGroundLeft + playGroundWidth)+')');
+			sendCommand('showHideObject("'+frogId+'","block")');
 		}
 		else{
 			sendCommand('resetObject("'+frogId+'", '+(parseInt(frog.style.left) + speed)+')');
@@ -152,11 +162,10 @@ function moveTorpedo(torpedoId, playerIndex) {
 	var torpedoLeft = parseInt(torpedo.style.left);
 	var torpedoTop = parseInt(torpedo.style.top);
 
-	
 	for(i = 0 ; i < frogs.length; i++)
 	{
 		var frog = document.getElementById(frogs[i].name );
-		if(frog != undefined){
+		if(frog != undefined && frog.style.display == "block"){
 			var frogLeft = parseInt(frog.style.left);
 			var frogTop = parseInt(frog.style.top);
 			var frogRight = frogLeft + frog.width;
@@ -165,16 +174,22 @@ function moveTorpedo(torpedoId, playerIndex) {
 			if(torpedoLeft > frogLeft && torpedoLeft < frogRight &&
 			   torpedoTop < frogBottom && torpedoTop > 	frogTop)
 			{
-				// only detect host player hits
 				if(torpedoId.startsWith(actualPlayer.torpedoPrefix)){
 					torpedoSteps[torpedoId] = 0
 					torpedo.style.left = "-100px";
+					frog.style.display = "none";
+					if(actualPlayer == player){
+						player.score = player.score + 1;
+						sendCommand('udpatePlayerScore('+playerIndex+', '+player.score+')');
+					}
+					// TODO show hit
 					return;
 				}
 				
-			}
-		}
+	         }		
+		 }
 	}
+	
 	window.setTimeout('moveTorpedo("'+torpedoId+'",'+playerIndex+');', 0);
 }
 
@@ -200,7 +215,7 @@ function ProcessKeypress(e) {
 }
 function moveObjectEachSide(obj, x, y, makeContinous = true) {
 	sendCommand('moveObj("' + obj + '", ' + x + ', ' + y + ','+makeContinous+')');
-//	moveObj(obj, x, y);
+// moveObj(obj, x, y);
 }
 function sendFireTorpedo() {
 	sendCommand('fireTorpedo(' + players.indexOf(player) + ')');	
