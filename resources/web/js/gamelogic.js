@@ -110,25 +110,29 @@ function makeMovementContinous(name, Xpix, Ypix){
 	}
 }
 
-function fireTorpedo(name, torpedoId) {
-	// Get the position of the saucer
-	var obj = document.getElementById(name);
+function fireTorpedo(playerIndex) {
+	
+	var actualPlayer = players[playerIndex];
+	actualPlayer.torpedoIndex = (actualPlayer.torpedoIndex + 1) % 10;
+	
+	var torpedoId = actualPlayer.torpedoPrefix + actualPlayer.torpedoIndex;
+	var obj = document.getElementById(actualPlayer.name);
 	var px = parseInt(obj.style.left);
 	var py = parseInt(obj.style.top);
 
-	// Fire topredo to the right of the saucer
 	var t = document.getElementById(torpedoId);
-	t.style.left = px + document.getElementById(player.name).width/2;
-	t.style.top = py + 20 * player.torpedoDirection;
+	t.style.left = px + document.getElementById(actualPlayer.name).width/2;
+	t.style.top = py + 20 * actualPlayer.torpedoDirection;
 
 	step = 0;
 	accel = 0.05;
 	vX = 1;
 
-	window.setTimeout('moveTorpedo("'+ torpedoId +'");', 0);
+	window.setTimeout('moveTorpedo("'+ torpedoId +'",'+playerIndex+');', 0);
 }
 
-function moveTorpedo(torpedoId) {
+function moveTorpedo(torpedoId, playerIndex) {
+	var actualPlayer = players[playerIndex];
 	var actualStep = torpedoSteps[torpedoId];
 	if(actualStep == undefined)
 	{
@@ -144,7 +148,7 @@ function moveTorpedo(torpedoId) {
 	var torpedo = document.getElementById(torpedoId);
 	var py = parseInt(torpedo.style.top);
 	vX += parseInt(accel); // Increase velocity by the amount of acceleration
-	torpedo.style.top = py + vX * player.torpedoDirection;
+	torpedo.style.top = py + vX * actualPlayer.torpedoDirection;
 	var torpedoLeft = parseInt(torpedo.style.left);
 	var torpedoTop = parseInt(torpedo.style.top);
 
@@ -162,7 +166,7 @@ function moveTorpedo(torpedoId) {
 			   torpedoTop < frogBottom && torpedoTop > 	frogTop)
 			{
 				// only detect host player hits
-				if(torpedoId.startsWith(player.torpedoPrefix)){
+				if(torpedoId.startsWith(actualPlayer.torpedoPrefix)){
 					torpedoSteps[torpedoId] = 0
 					torpedo.style.left = "-100px";
 					return;
@@ -171,7 +175,7 @@ function moveTorpedo(torpedoId) {
 			}
 		}
 	}
-	window.setTimeout('moveTorpedo("'+torpedoId+'");', 0);
+	window.setTimeout('moveTorpedo("'+torpedoId+'",'+playerIndex+');', 0);
 }
 
 function ProcessKeypress(e) {
@@ -199,7 +203,5 @@ function moveObjectEachSide(obj, x, y, makeContinous = true) {
 //	moveObj(obj, x, y);
 }
 function sendFireTorpedo() {
-	player.torpedoIndex = (player.torpedoIndex + 1) % 10;
-	sendCommand('fireTorpedo("' + player.name + '","'+ player.torpedoPrefix + player.torpedoIndex +'")');	
-	fireTorpedo(player.name, player.torpedoPrefix + player.torpedoIndex);
+	sendCommand('fireTorpedo(' + players.indexOf(player) + ')');	
 }

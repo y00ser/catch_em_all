@@ -25,11 +25,9 @@
   (loop [c (seq connections)]
     (when (seq c)
     (def theConnection (first c))
-;    (when (not= theConnection source)
       (.send theConnection (json/json-str
                          {:type type :message message }))
       (println "message is sent: " message)
-;    )
     (recur (rest c)))
     )
 )
