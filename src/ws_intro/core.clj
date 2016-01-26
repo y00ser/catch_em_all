@@ -15,8 +15,6 @@
     (def theConnection (first c))
     (.send theConnection (json/json-str
                        {:type "greetings" :message (rand-int 100000000) }))
-;;     (.send theConnection (json/json-str
-;;                        {:type "function" :message (.toString "alert(\"sup\");") }))
     (recur (rest c)))
     )
 )

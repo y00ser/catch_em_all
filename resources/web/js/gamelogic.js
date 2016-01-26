@@ -27,12 +27,12 @@ var playGame = false;
 function setPlayerIndex(index){
 	player = players[index];
 	player.score=0;
-	$("#content").html("You are: " + player.displayName);
+	$("#infoLine1").html("You are: " + player.displayName);
 }
 function udpatePlayerScore(index, score){
 	var actualPlayer = players[index];
 	if(actualPlayer == player){
-		$("#score").html("Your score: " + score);
+		$("#infoLine2").html("Your score: " + score);
 	}
 }
 
@@ -42,9 +42,8 @@ function moveObj(name, Xpix, Ypix, makeContinous = true) {
 	var px = parseInt(obj.style.left) + Xpix;
 	var py = parseInt(obj.style.top) + Ypix;
 	
-	if (name.startsWith("frog") || px > playGroundRect.leftTopX && py > playGroundRect.leftTopY
-			&& (px + obj.width) < playGroundRect.rightBottomX
-			&& (py + obj.height) < playGroundRect.rightBottomY) {
+	if (name.startsWith("frog") || px > playGroundRect.leftTopX
+			&& (px + obj.width) < playGroundRect.rightBottomX) {
 		obj.style.left = px;
 	}
 	if(makeContinous){
