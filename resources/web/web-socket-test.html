@@ -30,7 +30,8 @@ function init(){
 		
 		initGameLogic();
 		
-     ws = $.websocket("ws://127.0.0.1:8080/websocket", {
+		//52.31.71.148@use
+     ws = $.websocket("ws://localhost:8080/websocket", {
 			    events: {
 			      upcased: function(e) { $("#content").html(e.message); },
 			      greetings: function(e) { $("#content").html(e.message); },
@@ -45,13 +46,13 @@ function init(){
 
 <body onKeyPress="ProcessKeypress(event);" onLoad="init();">
 
-	<h4>Catch'em all</h4>
+	<div align="middle"><h4>Catch'em all</h4></div>
 <!-- 	<input id="message" type="text" /> -->
 
 	<div align="middle"><section id="content"></section><br/><section id="score">Score: </section></div>
 	<p>
 		<img id="saucer"
-			style="z-index: 0; left: 300px; position: absolute; top: 110px"
+			style="z-index: 0; left: 300px; position: absolute; top: 130px"
 			height=72 width=100 align=baseline border=0 hspace=0
 			src="pic/saucer.gif">
 	</p>
@@ -59,7 +60,7 @@ function init(){
 
 	<p>
 		<img id="rwithgun"
-			style="z-index: 0; left: 300px; position: absolute; top: 510px"
+			style="z-index: 0; left: 300px; position: absolute; top: 560px"
 			height=72 width=100 align=baseline border=0 hspace=0
 			src="pic/rwithgun.jpg">
 			
@@ -68,10 +69,10 @@ function init(){
 			height=50 width=50 align=baseline border=0 hspace=0
 			src="pic/frog0.png">
 			
-<!-- 			<img id="frog1" -->
-<!-- 			style="z-index: 0; left: 300px; position: absolute; top: 310px" -->
-<!-- 			height=50 width=50 align=baseline border=0 hspace=0 -->
-<!-- 			src="pic/frog0.png"> -->
+			<img id="frog1"
+			style="z-index: 0; left: 1010px; position: absolute; top: 410px"
+			height=50 width=50 align=baseline border=0 hspace=0
+			src="pic/frog0.png">
 	</p>
 
 

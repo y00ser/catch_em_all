@@ -16,7 +16,7 @@ const bottomPlayer = {name: "rwithgun", displayName: "Bandit", torpedoDirection:
 const players = [topPlayer, bottomPlayer];
 const frog0 = {name:"frog0" , startTop:100, jumpSpeed: 100, jumpFreq: 1000};
 const frog1 = {name:"frog1" , startTop:200, jumpSpeed: 50, jumpFreq: 1000};
-const frogs = [frog0];
+const frogs = [frog0, frog1];
 
 
 var player;
@@ -181,11 +181,9 @@ function moveTorpedo(torpedoId, playerIndex) {
 						sendCommand('udpatePlayerScore('+playerIndex+', '+player.score+')');
 						sendCommand('showHideObject("'+frogs[i].name+'","none")');
 					}
-					
 					// TODO show hit
 					return;
 				}
-				
 	         }		
 		 }
 	}
@@ -215,7 +213,6 @@ function ProcessKeypress(e) {
 }
 function moveObjectEachSide(obj, x, y, makeContinous = true) {
 	sendCommand('moveObj("' + obj + '", ' + x + ', ' + y + ','+makeContinous+')');
-// moveObj(obj, x, y);
 }
 function sendFireTorpedo() {
 	sendCommand('fireTorpedo(' + players.indexOf(player) + ')');	
