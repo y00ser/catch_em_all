@@ -54,7 +54,6 @@ function moveObj(name, Xpix, Ypix, makeContinous = true) {
 function resetObject(name, Xpix) {
 	obj = document.getElementById(name);
 	obj.style.left = Xpix;
-	// TODO visibility true
 }
 var movementArray = new Array();
 var movementArrayMaxLength = 20;
@@ -177,11 +176,12 @@ function moveTorpedo(torpedoId, playerIndex) {
 				if(torpedoId.startsWith(actualPlayer.torpedoPrefix)){
 					torpedoSteps[torpedoId] = 0
 					torpedo.style.left = "-100px";
-					frog.style.display = "none";
 					if(actualPlayer == player){
 						player.score = player.score + 1;
 						sendCommand('udpatePlayerScore('+playerIndex+', '+player.score+')');
+						sendCommand('showHideObject("'+frogs[i].name+'","none")');
 					}
+					
 					// TODO show hit
 					return;
 				}
