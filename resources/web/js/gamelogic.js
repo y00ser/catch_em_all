@@ -13,7 +13,7 @@ var playGroundLeft;
 
 const topPlayer = {name:"saucer", displayName: "Space Boy" , torpedoDirection:1, torpedoIndex: 0, torpedoPrefix: "top", score: 0};
 const bottomPlayer = {name: "rwithgun", displayName: "Bandit", torpedoDirection:-1, torpedoIndex:0, torpedoPrefix: "bottom", score: 0};
-const observer = {name: "observer", displayName: "Observer"};
+const observer = {name: "observer", displayName: "Observer(Each match lasts for 45 seconds, after that observers play)"};
 const players = [topPlayer, bottomPlayer, observer];
 
 const frog0 = {name:"frog0" , startTop:100, jumpSpeed: 150, jumpFreq: 700};
