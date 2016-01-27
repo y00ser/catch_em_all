@@ -4,7 +4,7 @@ This is a browser based game for 2 players.
 
 Technologies used: Clojure/Websocket/Html/JavaScript/Frogs
 
-Reachable at http://52.31.71.148:8080/websocket
+Reachable at http://52.31.71.148:8080/web-socket-test.html
 
 ###Controls
 
