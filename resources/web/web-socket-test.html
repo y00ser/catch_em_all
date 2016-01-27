@@ -11,6 +11,9 @@
 <script
 	src="http://jquery-websocket.googlecode.com/files/jquery.websocket-0.0.1.js">
 </script>
+
+<script src="js/gamelogic.js"></script>
+
 <script>
 var ws;
 
@@ -38,7 +41,7 @@ function init(){
 
 </script>
 
-<script src="js/gamelogic.js"></script>
+
 </head>
 
 <body onKeyPress="ProcessKeypress(event);" onLoad="init();">
@@ -47,7 +50,7 @@ function init(){
 	<section id="infoLine1"></section><br/><section id="infoLine2">...</section>
 	</div>
 	<div  style="left: 600px; position: absolute; top: 10px">
-	<section id="infoLine3">controls: left, right, x</section>
+	<section id="infoLine3">controls: a and d to move s to fire torpedo</section>
 	</div>
 	<p>
 		<img id="saucer"
