@@ -35,9 +35,9 @@ function init(){
      ws = $.websocket("ws://localhost:8080/websocket", {
 			    events: {
 			      upcased: function(e) { $("#content").html(e.message); },
-			      greetings: function(e) { $("#content").html(e.message); },
+			      generalInfo: function(e) { $("#infoLine3").html(e.message); },
 			      function: function(e){  setTimeout(e.message, 0); }
-			    }});
+			    }});     
 }
 
 </script>
@@ -51,7 +51,7 @@ function init(){
 	<section id="infoLine1"></section><br/><section id="infoLine2">...</section>
 	</div>
 	<div  style="left: 600px; position: absolute; top: 10px">
-	test
+	<section id="infoLine3">...</section>
 	</div>
 	<p>
 		<img id="saucer"
@@ -93,16 +93,16 @@ function init(){
 	<img id="top8" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo.gif" width="12" height="12">
 	<img id="top9" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo.gif" width="12" height="12">
 	
-	<img id="bottom0" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo.gif" width="12" height="12">
-	<img id="bottom1" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo.gif" width="12" height="12">
-	<img id="bottom2" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo.gif" width="12" height="12">
-	<img id="bottom3" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo.gif" width="12" height="12">
-	<img id="bottom4" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo.gif" width="12" height="12">
-	<img id="bottom5" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo.gif" width="12" height="12">
-	<img id="bottom6" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo.gif" width="12" height="12">
-	<img id="bottom7" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo.gif" width="12" height="12">
-	<img id="bottom8" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo.gif" width="12" height="12">
-	<img id="bottom9" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo.gif" width="12" height="12">
+	<img id="bottom0" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo2.gif" width="12" height="12">
+	<img id="bottom1" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo2.gif" width="12" height="12">
+	<img id="bottom2" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo2.gif" width="12" height="12">
+	<img id="bottom3" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo2.gif" width="12" height="12">
+	<img id="bottom4" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo2.gif" width="12" height="12">
+	<img id="bottom5" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo2.gif" width="12" height="12">
+	<img id="bottom6" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo2.gif" width="12" height="12">
+	<img id="bottom7" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo2.gif" width="12" height="12">
+	<img id="bottom8" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo2.gif" width="12" height="12">
+	<img id="bottom9" style="z-index: 0; left: -100px; position: absolute; top: -100px" src="pic/torpedo2.gif" width="12" height="12">
 	</div>
 </body>
 </html>

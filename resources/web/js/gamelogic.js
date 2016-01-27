@@ -13,21 +13,26 @@ var playGroundLeft;
 
 const topPlayer = {name:"saucer", displayName: "Space Boy" , torpedoDirection:1, torpedoIndex: 0, torpedoPrefix: "top", score: 0};
 const bottomPlayer = {name: "rwithgun", displayName: "Bandit", torpedoDirection:-1, torpedoIndex:0, torpedoPrefix: "bottom", score: 0};
-const players = [topPlayer, bottomPlayer];
+const observer = {name: "observer", displayName: "Observer"};
+const players = [topPlayer, bottomPlayer, observer];
+
 const frog0 = {name:"frog0" , startTop:100, jumpSpeed: 300, jumpFreq: 7000};
 const frog1 = {name:"frog1" , startTop:200, jumpSpeed: 50, jumpFreq: 1000};
 const frogs = [frog0, frog1];
-
 
 var player;
 var torpedoPrefix = "torpedo"
 var torpedoSteps = {};
 var playGame = false;
+var matchTime = 45;
 
 function setPlayerIndex(index){
 	player = players[index];
-	player.score=0;
+	player.score= 0 ;
 	$("#infoLine1").html("You are: " + player.displayName);
+	if(index != 2){
+		setTimeout("ws.close(); alert('Match has ended!'); window.location.reload();", 45000);
+	}
 }
 function udpatePlayerScore(index, score){
 	var actualPlayer = players[index];
