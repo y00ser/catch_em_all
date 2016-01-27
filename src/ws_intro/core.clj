@@ -39,11 +39,8 @@
 (defn designatePlayers []
   (if (> (count connections) 1)
     (do
-      (println "designating players ")
       (def gameCoordinator (first connections))
       (def client (first (rest connections))) 
-        (println "client is " client)
-        (println "coordinator is " gameCoordinator)
       (.send gameCoordinator (json/json-str
                                {:type "function" :message "setPlayerIndex(0);playGame=true;startGame();" }))
       (.send client (json/json-str
@@ -66,17 +63,13 @@
 (defn removeConnection [conn]
   (println "removing connecion" conn)
   (when (= conn client)
-    (println "sending message to coordinator")
     (.send gameCoordinator (json/json-str
                              {:type "function" :message "playGame=false;" }))
     )
-  (println "managing collections" connections conn)
   (def connections (disj connections conn))
-  (println "when?")
   (when (and isGameStarted (or (= conn client) (= conn gameCoordinator)))
                  (designatePlayers)
                  )
-  (println "returning")
   )
   
   
@@ -85,7 +78,7 @@
     (let [message (-> json-message json/read-json (get-in [:data :message]))
           type (-> json-message json/read-json (get-in [:data :type]))
           ]
-      (sendMessage type message)
+;      (sendMessage type message)
       ))
   
   (defn -main []

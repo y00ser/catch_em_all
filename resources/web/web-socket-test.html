@@ -13,9 +13,6 @@
 </script>
 <script>
 var ws;
-//   $('#message').change(function(){
-
-//    ws.send('message', {type: "downcase", message: $("#message").val()});});
 
 function sendCommand(command){
    ws.send('message', {type: "function", message: command });

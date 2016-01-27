@@ -1,7 +1,7 @@
-step = 0; // Current step
-steps = 500; // Total number of steps to perform the effect
-accel = 0.05; // Acceleration
-vX = 4; // X velocity
+var step = 0; // Current step
+var steps = 500; // Total number of steps to perform the effect
+var accel = 0.05; // Acceleration
+var vX = 4; // X velocity
 
 var moveBy = 5; // players velocity
 
