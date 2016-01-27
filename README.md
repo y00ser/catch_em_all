@@ -8,6 +8,6 @@ Reachable at http://52.31.71.148:8080/web-socket-test.html
 
 ###Controls
 
-Move left: left arrow<br/>
-Move right: right arrow<br/>
-Shoot torpedo: x<br/>
+Move left: a<br/>
+Move right: d<br/>
+Shoot torpedo: s<br/>
