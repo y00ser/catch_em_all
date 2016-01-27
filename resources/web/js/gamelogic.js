@@ -16,9 +16,11 @@ const bottomPlayer = {name: "rwithgun", displayName: "Bandit", torpedoDirection:
 const observer = {name: "observer", displayName: "Observer"};
 const players = [topPlayer, bottomPlayer, observer];
 
-const frog0 = {name:"frog0" , startTop:100, jumpSpeed: 300, jumpFreq: 7000};
-const frog1 = {name:"frog1" , startTop:200, jumpSpeed: 50, jumpFreq: 1000};
-const frogs = [frog0, frog1];
+const frog0 = {name:"frog0" , startTop:100, jumpSpeed: 150, jumpFreq: 700};
+const frog1 = {name:"frog1" , startTop:200, jumpSpeed: 77, jumpFreq: 800};
+const frog2 = {name:"frog2" , startTop:200, jumpSpeed: 42, jumpFreq: 444};
+const frog3 = {name:"frog3" , startTop:200, jumpSpeed: 100, jumpFreq: 700};
+const frogs = [frog0, frog1, frog2, frog3];
 
 var player;
 var torpedoPrefix = "torpedo"
