@@ -43,7 +43,10 @@ function udpatePlayerScore(index, score){
 	}
 }
 
-function moveObj(name, Xpix, Ypix, makeContinous = true) {
+function moveObj(name, Xpix, Ypix, makeContinous) {
+	if(makeContinous == undefined){
+		makeContinous = true;
+	}
 	obj = document.getElementById(name);
 
 	var px = parseInt(obj.style.left) + Xpix;
@@ -89,7 +92,10 @@ function initFrogs(){
 		moveFrog(frogs[i].name,(-frogs[i].jumpSpeed), frogs[i].jumpFreq );
 	}
 }
-function showHideObject(id, display = "block"){
+function showHideObject(id, display){
+	if(display == undefined){
+		display = "block";
+	}
 	document.getElementById(id).style.display=display;
 }
 function moveFrog(frogId, speed, freq){
@@ -208,16 +214,19 @@ function ProcessKeypress(e) {
 	var moveObjectByX = 0;
 	var moveObjectByY = 0;
 
-	if (keycode == '37') {
+	if (ch == 'a') {
 		moveObjectEachSide(objectToMove, -moveBy, 0);
-	} else if (keycode == '39') {
+	} else if (ch == 'd') {
 		moveObjectEachSide(objectToMove, moveBy, 0);
 	}
-	else if (keycode == '120') {
+	else if (ch == 's') {
 		sendFireTorpedo();
 	}
 }
-function moveObjectEachSide(obj, x, y, makeContinous = true) {
+function moveObjectEachSide(obj, x, y, makeContinous ) {
+	if(makeContinous == undefined){
+		makeContinous = true;
+	}
 	sendCommand('moveObj("' + obj + '", ' + x + ', ' + y + ','+makeContinous+')');
 }
 function sendFireTorpedo() {
