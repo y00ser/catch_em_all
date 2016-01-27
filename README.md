@@ -1,14 +1,7 @@
-# ws-intro
+# Catch'em all
 
-A Clojure library designed to ... well, that part is up to you.
+This is a browser based game for 2 players.
 
-## Usage
+Technologies used: Clojure/Websocket/Html/JavaScript/Frogs
 
-FIXME
-
-## License
-
-Copyright © 2016 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Reachable at http://52.31.71.148:8080/websocket
