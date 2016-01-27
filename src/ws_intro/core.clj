@@ -8,60 +8,88 @@
 
 
 (def connections #{})
+(def isGameStarted false)
+(def gameCoordinator nil)
+(def client nil)
 
-(defn sendGreetings []
+(defn gameRestarter [])
+(defn addConnection [conn])
+(defn removeConnection [conn])
+
+(defn sendGeneralMessage [message]
   (loop [c (seq connections)]
     (when (seq c)
-    (def theConnection (first c))
-    (.send theConnection (json/json-str
-                       {:type "greetings" :message (rand-int 100000000) }))
-;;     (.send theConnection (json/json-str
-;;                        {:type "function" :message (.toString "alert(\"sup\");") }))
-    (recur (rest c)))
-    )
-)
-
-(defn sendMessage [type message source]
-  (loop [c (seq connections)]
-    (when (seq c)
-    (def theConnection (first c))
-    (when (not= theConnection source)
+      (def theConnection (first c))
       (.send theConnection (json/json-str
-                         {:type type :message message }))
+                             {:type "generalInfo" :message message }))
+      (recur (rest c)))
     )
-    (recur (rest c)))
-    )
-)
+  )
 
+(defn sendMessage [type message]
+  (loop [c (seq connections)]
+    (when (seq c)
+      (def theConnection (first c))
+      (.send theConnection (json/json-str
+                             {:type type :message message }))
+      (recur (rest c)))
+    )
+  )
+
+(defn designatePlayers []
+  (if (> (count connections) 1)
+    (do
+      (def gameCoordinator (first connections))
+      (def client (first (rest connections))) 
+      (.send gameCoordinator (json/json-str
+                               {:type "function" :message "setPlayerIndex(0);playGame=true;startGame();" }))
+      (.send client (json/json-str
+                      {:type "function" :message "setPlayerIndex(1);" }))
+      (def isGameStarted true)
+      )
+    (def isGameStarted false)
+ ))
 
 (defn addConnection [conn]
-  (println "conneciton added " (class conn))
+  (.send conn (json/json-str
+              {:type "function" :message "setPlayerIndex(2);" }))
+  (println "conneciton added " conn)
   (def connections (conj connections conn))
-  (sendGreetings)
+  (when (= false isGameStarted)
+    (designatePlayers)
     )
+  )
 
 (defn removeConnection [conn]
   (println "removing connecion" conn)
+  (when (= conn client)
+    (.send gameCoordinator (json/json-str
+                             {:type "function" :message "playGame=false;" }))
+    )
   (def connections (disj connections conn))
+  (when (and isGameStarted (or (= conn client) (= conn gameCoordinator)))
+                 (designatePlayers)
+                 )
   )
-
-
-
-(defn on-message [connection json-message]
-  (let [message (-> json-message json/read-json (get-in [:data :message]))
-        type (-> json-message json/read-json (get-in [:data :type]))
-        ]
-    (sendMessage type message connection)
-    ))
-
-(defn -main []
-  (doto (WebServers/createWebServer 8080)
-    (.add "/websocket"
-          (proxy [WebSocketHandler] []
-            (onOpen [c]  (addConnection c))
-            (onClose [c] (removeConnection c))
-            (onMessage [c j] (on-message c j))))
-
-    (.add (EmbeddedResourceHandler. "web"))
-    (.start)))
-
+  
+  
+  
+  (defn on-message [connection json-message]
+    (let [message (-> json-message json/read-json (get-in [:data :message]))
+          type (-> json-message json/read-json (get-in [:data :type]))
+          ]
+;      (sendMessage type message)
+      ))
+  
+  (defn -main []
+    (doto (WebServers/createWebServer 8080)
+      (.add "/websocket"
+        (proxy [WebSocketHandler] []
+          (onOpen [c]  (addConnection c))
+          (onClose [c] (removeConnection c))
+          (onMessage [c j] (on-message c j))))
+      
+      (.add (EmbeddedResourceHandler. "web"))
+      (.start)))
+  
+  
