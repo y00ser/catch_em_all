@@ -78,7 +78,7 @@
     (let [message (-> json-message json/read-json (get-in [:data :message]))
           type (-> json-message json/read-json (get-in [:data :type]))
           ]
-;      (sendMessage type message)
+      (sendMessage type message)
       ))
   
   (defn -main []
