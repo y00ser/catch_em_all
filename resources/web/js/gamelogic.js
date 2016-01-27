@@ -208,12 +208,12 @@ function ProcessKeypress(e) {
 	var moveObjectByX = 0;
 	var moveObjectByY = 0;
 
-	if (ch == 'a') {
+	if (keycode == '37') {
 		moveObjectEachSide(objectToMove, -moveBy, 0);
-	} else if (ch == 'd') {
+	} else if (keycode == '39') {
 		moveObjectEachSide(objectToMove, moveBy, 0);
 	}
-	else if (ch == 's') {
+	else if (keycode == '120') {
 		sendFireTorpedo();
 	}
 }
